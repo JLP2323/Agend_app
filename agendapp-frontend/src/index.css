@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   1) VARIANTE DARK BASADA EN CLASE
+   Tailwind v4 usa por defecto prefers-color-scheme. Aquí le decimos que
+   `dark:` se active cuando exista la clase .dark en <html> (la pondrá
+   ThemeContext). Así el botón sol/luna controla el tema.
+   ========================================================================== */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   2) DESIGN TOKENS — MODO CLARO (:root)
+   Los componentes NUNCA usan colores fijos; solo estos tokens.
+   ========================================================================== */
+:root {
+  color-scheme: light;
+
+  /* Superficies */
+  --canvas: #f8fafc;          /* fondo de la página (slate-50) */
+  --surface: #ffffff;         /* tarjetas */
+  --surface-border: #e2e8f0;  /* borde 1px de tarjetas (slate-200) */
+  --elevated: #f1f5f9;        /* inputs / superficies elevadas (slate-100) */
+  --elevated-border: #cbd5e1; /* borde de inputs (slate-300) */
+
+  /* Texto */
+  --text-primary: #0f172a;    /* slate-900 */
+  --text-secondary: #475569;  /* slate-600 */
+  --text-muted: #94a3b8;      /* slate-400 */
+
+  /* Acento principal (índigo) */
+  --accent-primary: #4f46e5;
+  --accent-primary-hover: #4338ca;
+  --accent-primary-fg: #ffffff;               /* texto sobre el acento */
+  --accent-primary-soft: rgba(79, 70, 229, 0.10);
+
+  /* Estado esmeralda: ABIERTO AHORA, Sincronizado, abono 5% */
+  --status-emerald-bg: rgba(5, 150, 105, 0.10);
+  --status-emerald-border: rgba(5, 150, 105, 0.30);
+  --status-emerald-fg: #047857;
+
+  /* Estado ámbar: slot bloqueado, reloj regresivo */
+  --status-amber-bg: rgba(217, 119, 6, 0.10);
+  --status-amber-border: rgba(217, 119, 6, 0.35);
+  --status-amber-fg: #b45309;
+
+  /* Estado peligro (errores de formulario) */
+  --status-danger-fg: #dc2626;
+
+  /* Sombra de tarjetas */
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.08), 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* ==========================================================================
+   3) DESIGN TOKENS — MODO OSCURO (.dark) — Salón Lumina
+   Mismos nombres de variable, distintos valores: ahí está la magia.
+   ========================================================================== */
+.dark {
+  color-scheme: dark;
+
+  --canvas: #0b0d17;
+  --surface: #131726;
+  --surface-border: #252b42;
+  --elevated: #1a1f33;
+  --elevated-border: #252b42;
+
+  --text-primary: #f1f3ff;
+  --text-secondary: #a3a9c7;
+  --text-muted: #6b7191;
+
+  --accent-primary: #b4b8ff;
+  --accent-primary-hover: #c6c9ff;
+  --accent-primary-fg: #0f1226;
+  --accent-primary-soft: rgba(180, 184, 255, 0.12);
+
+  --status-emerald-bg: rgba(52, 211, 153, 0.12);
+  --status-emerald-border: rgba(52, 211, 153, 0.30);
+  --status-emerald-fg: #34d399;
+
+  --status-amber-bg: rgba(251, 191, 36, 0.12);
+  --status-amber-border: rgba(251, 191, 36, 0.35);
+  --status-amber-fg: #fbbf24;
+
+  --status-danger-fg: #f87171;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* ==========================================================================
+   4) PUENTE A TAILWIND (@theme inline)
+   Convierte cada variable en utilidades: --color-canvas => bg-canvas,
+   text-canvas, border-canvas... `inline` hace que Tailwind use var(--canvas)
+   directamente, por lo que el valor cambia en vivo al alternar .dark.
+   ========================================================================== */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-border: var(--surface-border);
+  --color-elevated: var(--elevated);
+  --color-elevated-border: var(--elevated-border);
+
+  --color-content: var(--text-primary);
+  --color-content-secondary: var(--text-secondary);
+  --color-content-muted: var(--text-muted);
+
+  --color-accent: var(--accent-primary);
+  --color-accent-hover: var(--accent-primary-hover);
+  --color-accent-fg: var(--accent-primary-fg);
+  --color-accent-soft: var(--accent-primary-soft);
+
+  --color-emerald-soft: var(--status-emerald-bg);
+  --color-emerald-line: var(--status-emerald-border);
+  --color-emerald-fg: var(--status-emerald-fg);
+
+  --color-amber-soft: var(--status-amber-bg);
+  --color-amber-line: var(--status-amber-border);
+  --color-amber-fg: var(--status-amber-fg);
+
+  --color-danger-fg: var(--status-danger-fg);
+
+  --shadow-card: var(--shadow-card);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ==========================================================================
+   5) BASE GLOBAL
+   ========================================================================== */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100svh;
+    background-color: var(--canvas);
+    color: var(--text-primary);
+    /* Transición suave al alternar tema */
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  #root {
+    min-height: 100svh;
+  }
+}
